@@ -1,0 +1,44 @@
+.twitter-translator-toggle {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #1da1f2;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.twitter-translator-toggle:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+[data-translated="true"] {
+  position: relative;
+}
+
+[data-showing="translated"] {
+  background-color: rgba(29, 161, 242, 0.03);
+  padding: 4px;
+  padding-right: 35px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  min-height: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .twitter-translator-toggle {
+    background: #1d9bf0;
+  }
+  
+  [data-showing="translated"] {
+    background-color: rgba(29, 155, 240, 0.08);
+    padding-right: 35px;
+  }
+}

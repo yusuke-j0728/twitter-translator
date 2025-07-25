@@ -1,0 +1,30 @@
+Twitter Translator Chrome Extension - Usage Guide
+===============================================
+
+Installation:
+1. Add icon files (see ICON_SETUP.txt)
+2. Open Chrome and go to chrome://extensions/
+3. Enable "Developer mode" (top right)
+4. Click "Load unpacked"
+5. Select this folder (twitter-translator)
+
+How to Use:
+1. Go to Twitter.com or X.com
+2. The extension will automatically detect and translate tweets
+3. Translated text directly replaces the original
+4. Click the 🌐 button on any tweet to toggle between original/translated
+5. Click the extension icon to access settings:
+   - Enable/disable translation
+   - Change source language (auto-detect by default)
+   - Change target language
+
+Features:
+- Direct text replacement (no duplicate display)
+- Toggle button (🌐) to switch between original and translated text
+- Automatic translation of tweets as you scroll
+- Right-click context menu for manual translation
+- Dark mode support
+- Light blue highlight on translated tweets
+- Works without Twitter API
+
+Note: This uses Google Translate's free API for translations.

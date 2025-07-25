@@ -1,0 +1,18 @@
+Icon Setup Instructions
+=====================
+
+This Chrome extension requires icon files. Please create the following PNG images:
+
+1. icon16.png - 16x16 pixels
+2. icon48.png - 48x48 pixels  
+3. icon128.png - 128x128 pixels
+
+Suggested icon design:
+- A simple "T" letter with translation arrows
+- Use Twitter's blue color (#1DA1F2) as accent
+- Keep the design minimal and clear at small sizes
+
+You can use any image editor or online tool to create these icons.
+Alternatively, you can use a placeholder icon generator or download free icons.
+
+Once created, place the PNG files in the root directory of the extension.
