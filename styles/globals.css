@@ -1,0 +1,216 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+  color: #1DA1F2;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.header p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.input-section {
+  margin-bottom: 30px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.user-input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.user-input:focus {
+  border-color: #1DA1F2;
+}
+
+.fetch-button {
+  padding: 12px 24px;
+  background: #1DA1F2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.fetch-button:hover:not(:disabled) {
+  background: #0d8bd9;
+}
+
+.fetch-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #ffe6e6;
+  color: #d63384;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #f1aeb5;
+}
+
+.tweets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tweet-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 1px solid #e1e8ed;
+  transition: box-shadow 0.3s;
+}
+
+.tweet-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.tweet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.author-name {
+  font-weight: 700;
+  color: #14171a;
+}
+
+.author-username {
+  color: #657786;
+  font-size: 0.9rem;
+}
+
+.tweet-date {
+  color: #657786;
+  font-size: 0.9rem;
+}
+
+.tweet-content {
+  line-height: 1.6;
+}
+
+.original-text {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f7f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #1DA1F2;
+}
+
+.original-text strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #1DA1F2;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.original-text p {
+  margin: 0;
+  color: #657786;
+}
+
+.translated-text {
+  margin-bottom: 10px;
+}
+
+.translated-text strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #14171a;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.translated-text p {
+  margin: 0;
+  color: #14171a;
+  font-size: 1.1rem;
+}
+
+.language-info {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e1e8ed;
+}
+
+.language-info small {
+  color: #657786;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .input-group {
+    flex-direction: column;
+  }
+  
+  .tweet-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
