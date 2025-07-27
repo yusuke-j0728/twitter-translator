@@ -38,6 +38,31 @@ export async function getUserTweets(userId: string, maxResults: number = 10) {
   }
 }
 
+export async function getSingleTweet(tweetId: string): Promise<Tweet> {
+  try {
+    const tweet = await twitterClient.v2.singleTweet(tweetId, {
+      'tweet.fields': ['created_at', 'author_id'],
+      'user.fields': ['username', 'name'],
+      expansions: ['author_id']
+    });
+    
+    if (!tweet.data) {
+      throw new Error('Tweet not found');
+    }
+    
+    const author = tweet.includes?.users?.[0];
+    
+    return {
+      ...tweet.data,
+      author_username: author?.username,
+      author_name: author?.name
+    };
+  } catch (error) {
+    console.error('Error fetching single tweet:', error);
+    throw error;
+  }
+}
+
 export async function getFollowingTweets(userId: string, maxTweets: number = 50) {
   try {
     const following = await getFollowingUsers(userId);

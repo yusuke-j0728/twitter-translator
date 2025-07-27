@@ -41,13 +41,48 @@ body {
   margin-bottom: 30px;
 }
 
+.input-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  background: #e1e8ed;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #657786;
+  cursor: pointer;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.tab-button:active {
+  transform: scale(0.96);
+}
+
+.tab-button.active {
+  background: white;
+  color: #1DA1F2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 .input-group {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
 }
 
-.user-input {
+.user-input, .url-input {
   flex: 1;
   padding: 12px 16px;
   font-size: 16px;
@@ -57,7 +92,7 @@ body {
   transition: border-color 0.3s;
 }
 
-.user-input:focus {
+.user-input:focus, .url-input:focus {
   border-color: #1DA1F2;
 }
 
@@ -71,10 +106,17 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .fetch-button:hover:not(:disabled) {
   background: #0d8bd9;
+}
+
+.fetch-button:active:not(:disabled) {
+  background: #0970c2;
+  transform: scale(0.98);
 }
 
 .fetch-button:disabled {
@@ -195,22 +237,193 @@ body {
   font-style: italic;
 }
 
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 1000;
+  max-width: 90%;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.install-prompt-text {
+  flex: 1;
+}
+
+.install-prompt-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #14171a;
+}
+
+.install-prompt-text small {
+  color: #657786;
+  font-size: 12px;
+}
+
+.install-button {
+  background: #1DA1F2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.install-button:hover {
+  background: #0d8bd9;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #657786;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.help-section {
+  margin-top: 20px;
+  background: #f7f9fa;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.help-section summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #14171a;
+  user-select: none;
+}
+
+.help-section summary::-webkit-details-marker {
+  color: #1DA1F2;
+}
+
+.help-content {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e1e8ed;
+}
+
+.help-content h3 {
+  margin: 0 0 10px 0;
+  color: #14171a;
+  font-size: 16px;
+}
+
+.help-content p {
+  margin: 10px 0;
+  color: #657786;
+  font-size: 14px;
+}
+
+.bookmarklet {
+  display: inline-block;
+  background: #1DA1F2;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.bookmarklet:hover {
+  background: #0d8bd9;
+}
+
+.help-text {
+  font-size: 13px;
+  color: #657786;
+  margin-top: 10px;
+}
+
+/* Mobile-first responsive design */
 @media (max-width: 768px) {
   .container {
+    max-width: 100%;
+    padding: 10px;
+  }
+  
+  .header {
+    margin-bottom: 20px;
     padding: 15px;
   }
   
   .header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+  
+  .header p {
+    font-size: 1rem;
   }
   
   .input-group {
     flex-direction: column;
   }
   
+  .user-input, .url-input {
+    width: 100%;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .fetch-button {
+    width: 100%;
+    padding: 14px;
+  }
+  
+  .tweet-card {
+    padding: 15px;
+  }
+  
   .tweet-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+  }
+  
+  .original-text, .translated-text {
+    padding: 12px;
+  }
+  
+  .translated-text p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .header p {
+    font-size: 0.9rem;
   }
 }
