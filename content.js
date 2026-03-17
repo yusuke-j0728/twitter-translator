@@ -1,4 +1,4 @@
-let targetLang = 'ja';
+let targetLang = 'en';
 let sourceLang = 'auto';
 let isEnabled = true;
 
@@ -8,10 +8,40 @@ chrome.storage.sync.get(['targetLang', 'sourceLang', 'isEnabled'], (result) => {
   if (result.isEnabled !== undefined) isEnabled = result.isEnabled;
 });
 
+function revertAllTranslations() {
+  const translatedElements = document.querySelectorAll('[data-translated]');
+  translatedElements.forEach(el => {
+    const originalText = el.getAttribute('data-original-text');
+    if (originalText) {
+      const toggleBtn = el.querySelector('.twitter-translator-toggle');
+      if (toggleBtn) toggleBtn.remove();
+      el.innerText = originalText;
+      el.style.paddingRight = '';
+      el.style.position = '';
+    }
+    el.removeAttribute('data-translated');
+    el.removeAttribute('data-original-text');
+    el.removeAttribute('data-translated-text');
+    el.removeAttribute('data-showing');
+  });
+}
+
+function retranslateAll() {
+  const tweets = findTweetElements();
+  tweets.forEach(tweet => translateTweet(tweet));
+}
+
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.targetLang) targetLang = changes.targetLang.newValue;
   if (changes.sourceLang) sourceLang = changes.sourceLang.newValue;
-  if (changes.isEnabled) isEnabled = changes.isEnabled.newValue;
+  if (changes.isEnabled) {
+    isEnabled = changes.isEnabled.newValue;
+    if (!isEnabled) {
+      revertAllTranslations();
+    } else {
+      retranslateAll();
+    }
+  }
 });
 
 function findTweetElements() {
@@ -34,16 +64,25 @@ function findTweetElements() {
   return tweets;
 }
 
-async function translateText(text, from = 'auto', to = 'ja') {
+async function translateText(text, from = 'auto', to = 'en') {
   try {
     const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`);
     const data = await response.json();
     if (data && data[0]) {
-      return data[0].map(item => item[0]).join('');
+      const translatedText = data[0].map(item => item[0]).join('');
+      const detectedLang = data[2] || from;
+      return { translatedText, detectedLang };
     }
   } catch (error) {
     console.error('Translation error:', error);
   }
+  return null;
+}
+
+function detectTweetLang(element) {
+  if (element.hasAttribute('lang')) return element.getAttribute('lang');
+  const parent = element.closest('[lang]');
+  if (parent) return parent.getAttribute('lang');
   return null;
 }
 
@@ -57,12 +96,27 @@ function createToggleButton() {
 
 async function translateTweet(element) {
   if (!isEnabled || element.hasAttribute('data-translated')) return;
-  
+
+  const tweetLang = detectTweetLang(element);
+  if (tweetLang && tweetLang.startsWith(targetLang)) return;
+
   element.setAttribute('data-translated', 'true');
-  
+
   const originalText = element.innerText;
-  const translatedText = await translateText(originalText, sourceLang, targetLang);
-  
+  const result = await translateText(originalText, sourceLang, targetLang);
+
+  if (!result) {
+    element.removeAttribute('data-translated');
+    return;
+  }
+
+  const { translatedText, detectedLang } = result;
+
+  if (detectedLang === targetLang) {
+    element.removeAttribute('data-translated');
+    return;
+  }
+
   if (translatedText && translatedText !== originalText) {
     // Store original text
     element.setAttribute('data-original-text', originalText);
