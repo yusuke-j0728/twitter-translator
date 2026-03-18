@@ -32,8 +32,15 @@ function retranslateAll() {
 }
 
 chrome.storage.onChanged.addListener((changes) => {
-  if (changes.targetLang) targetLang = changes.targetLang.newValue;
-  if (changes.sourceLang) sourceLang = changes.sourceLang.newValue;
+  let langChanged = false;
+  if (changes.targetLang) {
+    targetLang = changes.targetLang.newValue;
+    langChanged = true;
+  }
+  if (changes.sourceLang) {
+    sourceLang = changes.sourceLang.newValue;
+    langChanged = true;
+  }
   if (changes.isEnabled) {
     isEnabled = changes.isEnabled.newValue;
     if (!isEnabled) {
@@ -41,6 +48,9 @@ chrome.storage.onChanged.addListener((changes) => {
     } else {
       retranslateAll();
     }
+  } else if (langChanged && isEnabled) {
+    revertAllTranslations();
+    retranslateAll();
   }
 });
 

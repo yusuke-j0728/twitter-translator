@@ -1,10 +1,14 @@
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({
-    targetLang: 'ja',
-    sourceLang: 'auto',
-    isEnabled: true
+  chrome.storage.sync.get(['targetLang', 'sourceLang', 'isEnabled'], (result) => {
+    const defaults = {};
+    if (result.targetLang === undefined) defaults.targetLang = 'ja';
+    if (result.sourceLang === undefined) defaults.sourceLang = 'auto';
+    if (result.isEnabled === undefined) defaults.isEnabled = true;
+    if (Object.keys(defaults).length > 0) {
+      chrome.storage.sync.set(defaults);
+    }
   });
-  
+
   chrome.contextMenus.create({
     id: 'translateTweet',
     title: 'このツイートを翻訳',
