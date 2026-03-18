@@ -6,7 +6,7 @@ const statusDiv = document.getElementById('status');
 chrome.storage.sync.get(['isEnabled', 'sourceLang', 'targetLang'], (result) => {
   enableToggle.checked = result.isEnabled !== false;
   sourceLangSelect.value = result.sourceLang || 'auto';
-  targetLangSelect.value = result.targetLang || 'ja';
+  targetLangSelect.value = result.targetLang || 'en';
 });
 
 function showStatus() {
