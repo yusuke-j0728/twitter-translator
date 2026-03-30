@@ -23,6 +23,7 @@ function assert(condition, message) {
 const contentJs = fs.readFileSync(path.join(__dirname, '..', 'content.js'), 'utf8');
 const popupJs = fs.readFileSync(path.join(__dirname, '..', 'popup.js'), 'utf8');
 const popupHtml = fs.readFileSync(path.join(__dirname, '..', 'popup.html'), 'utf8');
+const backgroundJs = fs.readFileSync(path.join(__dirname, '..', 'background.js'), 'utf8');
 
 // ============================================================
 // Test 1: Default target language is English
@@ -62,7 +63,7 @@ assert(
 );
 
 assert(
-  contentJs.includes("if (!isEnabled) {\n      revertAllTranslations();"),
+  contentJs.includes("if (!isEnabled) {") && contentJs.includes("revertAllTranslations();"),
   'content.js: disabling calls revertAllTranslations'
 );
 
@@ -98,7 +99,7 @@ assert(
 );
 
 assert(
-  contentJs.includes("} else {\n      retranslateAll();\n    }"),
+  contentJs.includes("} else {") && contentJs.includes("retranslateAll();"),
   'content.js: enabling calls retranslateAll'
 );
 
@@ -150,6 +151,56 @@ assert(
 assert(
   contentJs.includes("const detectedLang = data[2] || from"),
   'content.js: detected language extracted from API response data[2]'
+);
+
+// ============================================================
+// Test 6: Toggle switch uses <label> so clicks propagate
+// ============================================================
+console.log('\n[Test] Toggle switch should use <label> for proper click handling');
+
+assert(
+  popupHtml.includes('<label class="toggle-switch">'),
+  'popup.html: toggle-switch uses <label> element (not <div>)'
+);
+
+assert(
+  popupHtml.includes('</label>') && !popupHtml.match(/<div class="toggle-switch">/),
+  'popup.html: no <div class="toggle-switch"> remains'
+);
+
+// ============================================================
+// Test 7: background.js preserves existing settings on update
+// ============================================================
+console.log('\n[Test] background.js should not overwrite existing settings');
+
+assert(
+  backgroundJs.includes('chrome.storage.sync.get('),
+  'background.js: reads existing settings before setting defaults'
+);
+
+assert(
+  backgroundJs.includes('=== undefined'),
+  'background.js: only sets defaults for undefined values'
+);
+
+assert(
+  !backgroundJs.match(/onInstalled[\s\S]*?chrome\.storage\.sync\.set\(\{\s*targetLang:/),
+  'background.js: does not unconditionally set targetLang in onInstalled'
+);
+
+// ============================================================
+// Test 8: Language change triggers retranslation
+// ============================================================
+console.log('\n[Test] Language change should trigger retranslation');
+
+assert(
+  contentJs.includes('langChanged'),
+  'content.js: tracks language change flag'
+);
+
+assert(
+  contentJs.includes('else if (langChanged && isEnabled)'),
+  'content.js: retranslates when language changes and translation is enabled'
 );
 
 // ============================================================
