@@ -46,14 +46,33 @@ Twitter APIを使用せずに、ブラウザ上で直接ツイートを翻訳す
 
 ```
 twitter-translator/
-├── manifest.json       # 拡張機能の設定ファイル
+├── manifest.json       # Chrome拡張機能の設定ファイル
 ├── content.js         # ツイート検出と翻訳処理
 ├── background.js      # バックグラウンド処理
 ├── popup.html        # 設定画面のHTML
 ├── popup.js          # 設定画面の処理
 ├── styles.css        # スタイルシート
-├── tests/            # テストファイル
-│   └── content.test.js # Chrome拡張のユニットテスト
+├── tests/            # Chrome拡張テスト
+│   └── content.test.js
+├── ios/              # iOS Safari Web Extension
+│   └── TwitterTranslator/
+│       ├── TwitterTranslator.xcodeproj/
+│       ├── TwitterTranslator/        # iOSアプリ本体
+│       │   ├── TwitterTranslatorApp.swift
+│       │   ├── ContentView.swift
+│       │   └── Info.plist
+│       ├── TwitterTranslatorExtension/ # Safari拡張機能
+│       │   ├── SafariWebExtensionHandler.swift
+│       │   ├── Info.plist
+│       │   └── Resources/
+│       │       ├── manifest.json
+│       │       ├── content.js
+│       │       ├── popup.html
+│       │       ├── popup.js
+│       │       ├── background.js
+│       │       └── styles.css
+│       └── tests/
+│           └── extension.test.js
 ├── Dockerfile        # Docker環境設定
 ├── docker-compose.yml # Docker Compose設定
 ├── README.md         # このファイル
@@ -72,11 +91,42 @@ twitter-translator/
 - ドイツ語
 - その他（自動検出）
 
+## iOS (Safari Web Extension)
+
+iPhoneのSafariでも同じ翻訳機能が使えます。
+
+### iOS版の特徴
+- Chrome版と同じ自動翻訳機能
+- モバイル対応（タップしやすいボタンサイズ、ダークモード対応）
+- `contextMenus` を除外（iOS Safariでは非対応）
+- `browser` / `chrome` API両方に対応
+
+### iOSビルド方法
+
+1. Xcode 15以上がインストールされたMacが必要です
+2. プロジェクトを開く:
+   ```bash
+   open ios/TwitterTranslator/TwitterTranslator.xcodeproj
+   ```
+3. Bundle Identifierを自分のものに変更
+   - `com.example.TwitterTranslator` → 自分のID
+   - `com.example.TwitterTranslator.Extension` → 自分のID
+4. 実機またはシミュレータでビルド・実行
+5. iPhoneで「設定」→「Safari」→「機能拡張」→「Twitter Translator」を有効化
+6. twitter.com / x.com へのアクセスを許可
+
+### アイコン画像
+`ios/TwitterTranslator/TwitterTranslatorExtension/Resources/images/` に以下を配置:
+- `icon-48.png`, `icon-96.png`, `icon-128.png`, `icon-256.png`, `icon-512.png`
+
 ## テスト
 
 ```bash
-# ローカルで実行
+# Chrome拡張テスト
 npm test
+
+# iOS拡張テスト
+node ios/TwitterTranslator/tests/extension.test.js
 
 # Dockerで実行
 docker-compose run test
